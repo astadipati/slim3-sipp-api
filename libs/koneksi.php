@@ -1,9 +1,13 @@
 <?php 
-$host = "localhost";
-$user = "root";
-$pass = "Kul0nuwun";
-// $db_name = "myapis";
-$db_name = "sippweb";
-$mysqli = new mysqli($host, $user, $pass, $db_name);
+
+$dbhost = 'localhost';
+$dbuser = 'root';
+$dbpass = 'Kul0nuwun';
+$dbname = 'sippweb';
+$dbmethod = 'mysql:dbname=';
+
+$dsn = $dbmethod.$dbname;
+$pdo = new PDO($dsn, $dbuser, $dbpass);
+$db  = new NotORM($pdo);
 
  ?>
