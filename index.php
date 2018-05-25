@@ -7,7 +7,7 @@ use \Slim\App;
 $app = new App();
 require_once('libs/koneksi.php');
 $app-> get('/', function(){
-    echo "Hello World";
+    echo "Hello World ^_^";
 });
 
 $app ->get('/semua_ac', function() use($app, $db){
@@ -38,6 +38,58 @@ $app ->get('/ac/{id}', function($request, $response, $args) use($app, $db){
         $responseJson["tanggal_ac"] = $acdetail['tanggal_ac'];
         $responseJson["tanggal_serah1"] = $acdetail['serah1'];
         $responseJson["tanggal_serah2"] = $acdetail['serah2'];
+    }
+
+    echo json_encode($responseJson); 
+});
+// riwayat
+$app ->get('/riwayat', function() use($app, $db){
+	$dosen["error"] = false;
+	$dosen["message"] = "Berhasil mendapatkan data riwayat";
+    foreach($db->view_riwayat() as $data){
+        $dosen['semuariwayat'][] = array(
+            'id' => $data['IDPerkara'],
+            'tahapan' => $data['tahapan'],
+            'proses' => $data['proses']
+            );
+    }
+    echo json_encode($dosen);
+});
+
+$app ->get('/riwayat/{id}', function($request, $response, $args) use($app, $db){
+    $riwayat["error"] = false;
+    $riwayat["message"] = "Riwayat ditemukan";
+    foreach($db->view_riwayat()->where('IDPerkara', $args['id']) as $data){
+        $riwayat['riwayatdetil'][] = array(
+            'id' =>$data['IDPerkara'],
+            'tahapan' =>$data['tahapan'],
+            'proses' =>$data['proses'],
+            'tanggal' =>$data['tanggal']
+        );
+    }
+    echo json_encode($riwayat); 
+});
+// end
+
+
+$app ->get('/riwayatvv/{id}', function($request, $response, $args) use($app, $db){
+    $riwayat = $db->view_riwayat()->where('IDPerkara',$args['id']);
+    // while($row = $riwayat->fetch()){
+    //     echo $row['IDPerkara']=$riwayat['IDPerkara'];  
+    // };
+    while($riwayatdetail = $riwayat->fetch()){
+        $responseJson['IDPerkara'] = $riwayatdetail['IDPerkara'];
+        $responseJson[] = $riwayatdetail['tahapan'];
+        // $responseJson[] = $riwayatdetail['proses'];
+        // $responseJson[] = $riwayatdetail['tanggal'];
+    };
+    
+    if ($riwayat->count() == 0) {
+        $responseJson["error"] = true;
+        $responseJson["message"] = "Riwayat Perkara Tidak Ditemukan";
+    } else {
+        $responseJson["error"] = false;
+        $responseJson["message"] = "Sukses mengambil data";
     }
 
     echo json_encode($responseJson); 
