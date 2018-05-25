@@ -7,7 +7,7 @@ use \Slim\App;
 $app = new App();
 require_once('libs/koneksi.php');
 $app-> get('/', function(){
-    echo "Hello World ^_^";
+    echo "Hello Mbloo  ^_^ ";
 });
 
 $app ->get('/semua_ac', function() use($app, $db){
@@ -28,14 +28,14 @@ $app ->get('/ac/{id}', function($request, $response, $args) use($app, $db){
     $acdetail = $ac->fetch();
 
     if ($ac->count() == 0) {
-        $responseJson["error"] = true;
-        $responseJson["message"] = "Akte Cerai Tidak Ditemukan";
+        $responseJson["error"]          = true;
+        $responseJson["message"]        = "Akte Cerai Tidak Ditemukan";
     } else {
-        $responseJson["error"] = false;
-        $responseJson["message"] = "Berhasil mengambil data";
-        $responseJson["tahun_ac"] = $acdetail['tahun_akta_cerai'];
-        $responseJson["nomor_ac"] = $acdetail['nomor_akta_cerai'];
-        $responseJson["tanggal_ac"] = $acdetail['tanggal_ac'];
+        $responseJson["error"]          = false;
+        $responseJson["message"]        = "Berhasil mengambil data";
+        $responseJson["tahun_ac"]       = $acdetail['tahun_akta_cerai'];
+        $responseJson["nomor_ac"]       = $acdetail['nomor_akta_cerai'];
+        $responseJson["tanggal_ac"]     = $acdetail['tanggal_ac'];
         $responseJson["tanggal_serah1"] = $acdetail['serah1'];
         $responseJson["tanggal_serah2"] = $acdetail['serah2'];
     }
@@ -49,24 +49,24 @@ $app ->get('/dataumum/{id}', function($request, $response, $args) use($app, $db)
     $dudetail = $du->fetch();
 
     if ($du->count() == 0) {
-        $responseJson["error"] = true;
-        $responseJson["message"] = "Akte Cerai Tidak Ditemukan";
+        $responseJson["error"]          = true;
+        $responseJson["message"]        = "Akte Cerai Tidak Ditemukan";
     } else {
-        $responseJson["error"] = false;
-        $responseJson["message"] = "Berhasil mengambil data";
-        $responseJson["IDPerkara"] = $dudetail['IDPerkara'];
+        $responseJson["error"]          = false;
+        $responseJson["message"]        = "Berhasil mengambil data";
+        $responseJson["IDPerkara"]      = $dudetail['IDPerkara'];
         $responseJson["tanggal_daftar"] = $dudetail['tanggal_pendaftaran'];
-        $responseJson["jenis_perkara"] = $dudetail['jenisPerkara'];
-        $responseJson["nomor_perkara"] = $dudetail['noPerkara'];
-        $responseJson["tanggal_surat"] = $dudetail['tanggal_surat'];
-        $responseJson["petitum"] = $dudetail['petitumDakwaan'];
-        $responseJson["status_akhir"] = $dudetail['statusAkhir'];
-        $responseJson["pihak_pertama"] = $dudetail['pihakPertama'];
-        $responseJson["pihak_kedua"] = $dudetail['pihakKedua'];
-        $responseJson["pihak_ketiga"] = $dudetail['pihakKetiga'];
-        $responseJson["pihak_keempat"] = $dudetail['pihakKeempat'];
-        $responseJson["tanggal_minutasi"] = $dudetail['tanggal_minutasi'];
-        $responseJson["tanggal_bht"] = $dudetail['tanggal_bht'];
+        $responseJson["jenis_perkara"]  = $dudetail['jenisPerkara'];
+        $responseJson["nomor_perkara"]  = $dudetail['noPerkara'];
+        $responseJson["tanggal_surat"]  = $dudetail['tanggal_surat'];
+        $responseJson["petitum"]        = $dudetail['petitumDakwaan'];
+        $responseJson["status_akhir"]   = $dudetail['statusAkhir'];
+        $responseJson["pihak_pertama"]  = $dudetail['pihakPertama'];
+        $responseJson["pihak_kedua"]    = $dudetail['pihakKedua'];
+        $responseJson["pihak_ketiga"]   = $dudetail['pihakKetiga'];
+        $responseJson["pihak_keempat"]  = $dudetail['pihakKeempat'];
+        $responseJson["tanggal_minut"]  = $dudetail['tanggal_minutasi'];
+        $responseJson["tanggal_bht"]    = $dudetail['tanggal_bht'];
     }
 
     echo json_encode($responseJson); 
@@ -106,13 +106,13 @@ $app ->get('/transaksi/{id}', function($request, $response, $args) use($app, $db
     $transaksi["message"] = "Transaksi ditemukan";
     foreach($db->view_transaksi()->where('IDPerkara', $args['id']) as $data){
         $transaksi['transaksidetil'][] = array(
-            'id' =>$data['ID'],
-            'id_perkara' =>$data['IDPerkara'],
-            'jenis_transaksi' =>$data['jenis_transaksi'],
+            'id'                =>$data['ID'],
+            'id_perkara'        =>$data['IDPerkara'],
+            'jenis_transaksi'   =>$data['jenis_transaksi'],
             'tanggal_transaksi' =>$data['tanggal_transaksi'],
-            'uraian' =>$data['uraian'],
-            'nominal' =>$data['nominal'],
-            'keterangan' =>$data['keterangan']
+            'uraian'            =>$data['uraian'],
+            'nominal'           =>$data['nominal'],
+            'keterangan'        =>$data['keterangan']
         );
     }
     echo json_encode($transaksi); 
@@ -121,18 +121,18 @@ $app ->get('/transaksi/{id}', function($request, $response, $args) use($app, $db
 
 // Sidang
 $app ->get('/sidang/{id}', function($request, $response, $args) use($app, $db){
-    $sidang["error"] = false;
-    $sidang["message"] = "sidang ditemukan";
+    $sidang["error"]                = false;
+    $sidang["message"]              = "sidang ditemukan";
     foreach($db->view_sidang()->where('IDPerkara', $args['id']) as $data){
-        $sidang['sidangdetil'][] = array(
-            'id' =>$data['ID'],
-            'id_perkara' =>$data['IDPerkara'],
-            'tanggal_sidang' =>$data['tanggal_sidang'],
-            'jam_sidang' =>$data['jamSidang'],
-            'jam_selesai' =>$data['selesaiSidang'],
-            'agenda' =>$data['agenda'],
-            'ruangan' =>$data['ruangan'],
-            'alasan_tunda' =>$data['alasanDitunda']
+        $sidang['sidangdetil'][]    = array(
+            'id'                =>$data['ID'],
+            'id_perkara'        =>$data['IDPerkara'],
+            'tanggal_sidang'    =>$data['tanggal_sidang'],
+            'jam_sidang'        =>$data['jamSidang'],
+            'jam_selesai'       =>$data['selesaiSidang'],
+            'agenda'            =>$data['agenda'],
+            'ruangan'           =>$data['ruangan'],
+            'alasan_tunda'      =>$data['alasanDitunda']
         );
     }
     echo json_encode($sidang); 
