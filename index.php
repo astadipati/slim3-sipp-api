@@ -30,15 +30,14 @@ $app ->get('/ac/{id}', function($request, $response, $args) use($app, $db){
     if ($ac->count() == 0) {
         $responseJson["error"] = true;
         $responseJson["message"] = "Akte Cerai Tidak Ditemukan";
-        // $responseJson["nama"] = null;
-        // $responseJson["matkul"] = null;
-        // $responseJson["no_hp"] = null;
     } else {
         $responseJson["error"] = false;
         $responseJson["message"] = "Berhasil mengambil data";
         $responseJson["tahun_ac"] = $acdetail['tahun_akta_cerai'];
         $responseJson["nomor_ac"] = $acdetail['nomor_akta_cerai'];
         $responseJson["tanggal_ac"] = $acdetail['tanggal_ac'];
+        $responseJson["tanggal_serah1"] = $acdetail['serah1'];
+        $responseJson["tanggal_serah2"] = $acdetail['serah2'];
     }
 
     echo json_encode($responseJson); 
