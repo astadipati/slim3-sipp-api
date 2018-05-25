@@ -43,18 +43,18 @@ $app ->get('/ac/{id}', function($request, $response, $args) use($app, $db){
     echo json_encode($responseJson); 
 });
 // riwayat
-$app ->get('/riwayat', function() use($app, $db){
-	$dosen["error"] = false;
-	$dosen["message"] = "Berhasil mendapatkan data riwayat";
-    foreach($db->view_riwayat() as $data){
-        $dosen['semuariwayat'][] = array(
-            'id' => $data['IDPerkara'],
-            'tahapan' => $data['tahapan'],
-            'proses' => $data['proses']
-            );
-    }
-    echo json_encode($dosen);
-});
+// $app ->get('/riwayat', function() use($app, $db){
+// 	$dosen["error"] = false;
+// 	$dosen["message"] = "Berhasil mendapatkan data riwayat";
+//     foreach($db->view_riwayat() as $data){
+//         $dosen['semuariwayat'][] = array(
+//             'id' => $data['IDPerkara'],
+//             'tahapan' => $data['tahapan'],
+//             'proses' => $data['proses']
+//             );
+//     }
+//     echo json_encode($dosen);
+// });
 
 $app ->get('/riwayat/{id}', function($request, $response, $args) use($app, $db){
     $riwayat["error"] = false;
@@ -71,29 +71,24 @@ $app ->get('/riwayat/{id}', function($request, $response, $args) use($app, $db){
 });
 // end
 
-
-$app ->get('/riwayatvv/{id}', function($request, $response, $args) use($app, $db){
-    $riwayat = $db->view_riwayat()->where('IDPerkara',$args['id']);
-    // while($row = $riwayat->fetch()){
-    //     echo $row['IDPerkara']=$riwayat['IDPerkara'];  
-    // };
-    while($riwayatdetail = $riwayat->fetch()){
-        $responseJson['IDPerkara'] = $riwayatdetail['IDPerkara'];
-        $responseJson[] = $riwayatdetail['tahapan'];
-        // $responseJson[] = $riwayatdetail['proses'];
-        // $responseJson[] = $riwayatdetail['tanggal'];
-    };
-    
-    if ($riwayat->count() == 0) {
-        $responseJson["error"] = true;
-        $responseJson["message"] = "Riwayat Perkara Tidak Ditemukan";
-    } else {
-        $responseJson["error"] = false;
-        $responseJson["message"] = "Sukses mengambil data";
+// Transaksi
+$app ->get('/transaksi/{id}', function($request, $response, $args) use($app, $db){
+    $transaksi["error"] = false;
+    $transaksi["message"] = "Transaksi ditemukan";
+    foreach($db->view_transaksi()->where('IDPerkara', $args['id']) as $data){
+        $transaksi['transaksidetil'][] = array(
+            'id' =>$data['ID'],
+            'id_perkara' =>$data['IDPerkara'],
+            'jenis_transaksi' =>$data['jenis_transaksi'],
+            'tanggal_transaksi' =>$data['tanggal_transaksi'],
+            'uraian' =>$data['uraian'],
+            'nominal' =>$data['nominal'],
+            'keterangan' =>$data['keterangan']
+        );
     }
-
-    echo json_encode($responseJson); 
+    echo json_encode($transaksi); 
 });
+// end
 
 //run App
 $app->run();
